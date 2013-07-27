@@ -39,11 +39,18 @@ namespace PluginSystem
             throw new NotImplementedException();
         }
 
-        public void SendData(string data)
+        public string SendData(string data, bool response)
         {
 
-
+            return null;
         }
+
+        public string[] SendData(string[] data, bool response)
+        {
+
+            return null;
+        }
+
 
         public void GetBuffer()
         {

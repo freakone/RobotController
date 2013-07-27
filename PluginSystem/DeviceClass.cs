@@ -13,8 +13,18 @@ namespace PluginSystem
     public abstract class DeviceClass
     {
         public string type = "RBc";
-        public uint uID = 10;
+        private uint _uID = 0x10;
+        public uint uID
+        {
+            get { return _uID; }
+            set
+            {
+                _uID = value;
+                LoadSettings();
+            }
+        }
         public int iCOMindex = -1;
+        public char packetEnd = '\n';
         public DeviceSettings settings = new DeviceSettings();
         private string config
         {
@@ -28,8 +38,8 @@ namespace PluginSystem
 
         public abstract void GetADCData();
         public abstract void SetMOTOR(int id, int value);
-        public abstract string GetScanCommand();
-        public abstract void ParseCommand();
+        public abstract string[] GetScanCommand();
+        public abstract uint[] ParseScanCommand(string[] resp);
 
 
         public void LoadSettings()

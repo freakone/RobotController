@@ -24,10 +24,7 @@ namespace RobotController
             if (!Directory.Exists(Globals.strConfigFiles))
                 Directory.CreateDirectory(Globals.strConfigFiles);
 
-            Globals.loaded_modules.Add(new RBcClient(0x12));
-            Globals.loaded_modules.Add(new RBcClient(0x13));
-            Globals.loaded_modules.Add(new RBcClient(0x14));
-            Globals.loaded_modules.Add(new RBcClient(0x15));
+            Globals.loaded_modules.Add(new RBcClient());
         }
 
  
@@ -57,7 +54,15 @@ namespace RobotController
             using(ManualCOMAdd m = new ManualCOMAdd())
             {
                 m.ShowDialog();
+                RBcClient c = new RBcClient();
+               string[] s = Globals.serial_ports[0].SendData(c.GetScanCommand(), true);
+               uint[] b = c.ParseScanCommand(s); ;
 
+               foreach (uint u in b)
+               {
+                   RBcClient rbc = new RBcClient();
+                   rbc.uID = u;
+               }
             }
 
             ReloadDeviceList();
