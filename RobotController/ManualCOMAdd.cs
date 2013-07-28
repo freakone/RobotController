@@ -13,7 +13,7 @@ namespace RobotController
 {
     public partial class ManualCOMAdd : Form
     {
-        public string COM = "";
+        public List<string> COM = new List<string>();
         public ManualCOMAdd()
         {
             InitializeComponent();
@@ -22,8 +22,8 @@ namespace RobotController
 
         private void RefreshCOM()
         {
-            comboBox1.Items.Clear();
-            comboBox1.Items.AddRange(SerialPort.GetPortNames());
+            checkedListBox1.Items.Clear();
+            checkedListBox1.Items.AddRange(SerialPort.GetPortNames());
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -33,8 +33,9 @@ namespace RobotController
 
         private void button2_Click(object sender, EventArgs e)
         {
-            COM = comboBox1.Text;
-            this.Close();
+            for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                this.COM.Add(checkedListBox1.CheckedItems[i].ToString());
+                this.Close();
         }
     }
 }

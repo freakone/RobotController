@@ -4,21 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
+using System.Threading;
 
 namespace PluginSystem
 {
     public class SerialNode
     {
-        private SerialPort port;  
-
-        public SerialNode(string com, int baud, int databits, Parity par, StopBits stop)
+        private SerialPort port;
+        private Mutex m;
+        public SerialNode(string com)
         {
             port = new SerialPort();
-            port.BaudRate = baud;
-            port.PortName = com;
-            port.DataBits = databits;
-            port.Parity = par;
-            port.StopBits = stop;
+            port.PortName = com;          
             port.DataReceived += port_DataReceived;
 
             try
@@ -31,6 +28,14 @@ namespace PluginSystem
                 Globals.StatusCall(ex.ToString(), Globals.status_error);
             }
 
+        }
+
+        public void SetParameters(DeviceSettings s)
+        {
+            port.BaudRate = s.BaudRate;
+            port.DataBits = s.DataBits;
+            port.Parity = s.DataParity;
+            port.StopBits = s.DataStopBits;
         }
 
  

@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Reflection;
+using System.IO;
 
 namespace PluginSystem
 {
     public static class Globals
     {
         public static string strConfigFiles = "";
+        public static string strPluginFiles = "";
         public static readonly Color status_error = Color.Red;
         public static readonly Color status_info = Color.Black;
         public static readonly Color status_success = Color.Green;
@@ -17,6 +20,27 @@ namespace PluginSystem
         public static List<DeviceClass> loaded_modules = new List<DeviceClass>();
         public delegate void SetStatusEvent(object sender, SetStatusEventArgs e);
         public static SetStatusEvent statusEvent;
+        public static List<DeviceClass> known_modules = new List<DeviceClass>();
+
+        public static void LoadDlls()
+        {
+
+            foreach (string str in Directory.GetFiles(strPluginFiles, "*Client.dll"))
+            {
+
+                Assembly asm = Assembly.LoadFile(str);
+                Type[] types = asm.GetTypes();
+
+                for (int j = 0; j < types.Length; j++)
+                {
+                    if (typeof(DeviceClass).IsAssignableFrom(types[j]))
+                    {
+                        Globals.known_modules.Add((DeviceClass)Activator.CreateInstance(types[j]));                                
+                    }
+                }
+
+            }
+        }
 
         public static void StatusCall(string strText, Color c)
         {

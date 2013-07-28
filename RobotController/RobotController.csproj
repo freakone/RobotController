@@ -127,10 +127,6 @@
       <Project>{8e92defc-f2c8-499b-8e68-c23ca32c60b6}</Project>
       <Name>PluginSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RBcClient\RBcClient.csproj">
-      <Project>{ffc9ca00-7191-46e0-ac78-42999f40b743}</Project>
-      <Name>RBcClient</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

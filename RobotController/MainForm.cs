@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using Instruments;
 using System.IO;
 using PluginSystem;
+using System.Reflection;
+using System.Threading;
 
 namespace RobotController
 {
@@ -20,13 +22,15 @@ namespace RobotController
             InitializeComponent();
             Globals.statusEvent += new Globals.SetStatusEvent(SetStatus);
             Globals.strConfigFiles = Application.StartupPath + Path.DirectorySeparatorChar + "config_files" + Path.DirectorySeparatorChar;
+            Globals.strPluginFiles = Application.StartupPath + Path.DirectorySeparatorChar + "plugin_files" + Path.DirectorySeparatorChar;
 
             if (!Directory.Exists(Globals.strConfigFiles))
-                Directory.CreateDirectory(Globals.strConfigFiles);
+                Directory.CreateDirectory(Globals.strConfigFiles);            
 
-            Globals.loaded_modules.Add(new RBcClient());
+            Globals.LoadDlls();
         }
 
+       
  
         private void skanujToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -54,15 +58,40 @@ namespace RobotController
             using(ManualCOMAdd m = new ManualCOMAdd())
             {
                 m.ShowDialog();
-                RBcClient c = new RBcClient();
-               string[] s = Globals.serial_ports[0].SendData(c.GetScanCommand(), true);
-               uint[] b = c.ParseScanCommand(s); ;
 
-               foreach (uint u in b)
-               {
-                   RBcClient rbc = new RBcClient();
-                   rbc.uID = u;
-               }
+                if (scanThread != null && scanThread.IsAlive)
+                    scanThread.Abort();
+
+                scanThread = new Thread(() => DeviceScan(m.COM.ToArray()));
+                scanThread.Start();             
+            }
+
+            
+        }
+
+        private Thread scanThread;
+        void DeviceScan(string[] COM)
+        {
+
+            foreach(string s in COM)
+            {
+                SerialNode node = new SerialNode(s);
+
+                foreach(DeviceClass dc in Globals.known_modules)
+                {
+                    string[] resp = node.SendData(dc.GetScanCommand(), true);
+                    uint[] ids = dc.ParseScanCommand(resp);
+
+                    foreach(uint u in ids)
+                    {
+                        DeviceClass dcnew = (DeviceClass)Activator.CreateInstance(dc.GetType());
+                        dcnew.uID = u;
+                        dcnew.strCOMName = s;                            
+                        Globals.loaded_modules.Add(dcnew);
+                    }
+                }
+
+                Globals.serial_ports.Add(node);
             }
 
             ReloadDeviceList();
@@ -70,13 +99,28 @@ namespace RobotController
 
         private void ReloadDeviceList()
         {
-            treeViewDevices.Nodes.Clear();
+            if (this.InvokeRequired)
+            this.Invoke(new MethodInvoker(delegate(){
 
-            foreach(DeviceClass d in Globals.loaded_modules)
+                 treeViewDevices.Nodes.Clear();
+
+                foreach (DeviceClass d in Globals.loaded_modules)
+                {
+                    TreeNode tn = new TreeNode(d.settings.Name + " (ID: " + d.uID + ")");
+                    treeViewDevices.Nodes.Add(tn);
+
+                }
+            }));
+            else
             {
-                TreeNode tn = new TreeNode(d.settings.Name + "(ID: " + d.uID + ")");
-                treeViewDevices.Nodes.Add(tn);
+                treeViewDevices.Nodes.Clear();
 
+                foreach (DeviceClass d in Globals.loaded_modules)
+                {
+                    TreeNode tn = new TreeNode(d.settings.Name + " (ID: " + d.uID + ")");
+                    treeViewDevices.Nodes.Add(tn);
+
+                }
             }
         }
     }

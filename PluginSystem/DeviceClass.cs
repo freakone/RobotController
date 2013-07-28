@@ -23,7 +23,7 @@ namespace PluginSystem
                 LoadSettings();
             }
         }
-        public int iCOMindex = -1;
+        public string strCOMName = "";
         public char packetEnd = '\n';
         public DeviceSettings settings = new DeviceSettings();
         private string config
