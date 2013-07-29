@@ -12,22 +12,30 @@ namespace PluginSystem
     {
         private SerialPort port;
         private Mutex m;
+        public bool bError = false;
         public SerialNode(string com)
         {
             port = new SerialPort();
-            port.PortName = com;          
-            port.DataReceived += port_DataReceived;
+            port.PortName = com;
+            port.ReadTimeout = Settings.iPortTimeout;
+           // port.DataReceived += port_DataReceived;
 
+            OpenPort();
+        }
+
+        private void OpenPort()
+        {
             try
             {
                 port.Open();
-                Globals.StatusCall(com + " otwarty!", Globals.status_success);
+                bError = false;
+                Globals.StatusCall(port.PortName + " otwarty!", Globals.status_success);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Globals.StatusCall(ex.ToString(), Globals.status_error);
+                bError = true;
+                Globals.StatusCall(ex.Message, Globals.status_error);
             }
-
         }
 
         public void SetParameters(DeviceSettings s)
@@ -36,6 +44,7 @@ namespace PluginSystem
             port.DataBits = s.DataBits;
             port.Parity = s.DataParity;
             port.StopBits = s.DataStopBits;
+            port.NewLine = s.strEndLine;
         }
 
  
@@ -46,29 +55,60 @@ namespace PluginSystem
 
         public string SendData(string data, bool response)
         {
+            if (!port.IsOpen)
+                OpenPort();
 
-            return null;
+            if (bError)
+                return "";
+
+            try
+            {
+                port.WriteLine("");
+                port.BaseStream.Flush();
+                port.DiscardInBuffer();
+                port.DiscardOutBuffer();
+              
+                port.WriteLine(data);
+                port.BaseStream.Flush();
+
+                if(response)
+                {
+                    return port.ReadLine();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (ex is TimeoutException)
+                    return "";
+
+                bError = true;
+                Globals.StatusCall(ex.ToString(), Globals.status_error);
+                port.Close();
+            }
+
+            return "";
         }
 
         public string[] SendData(string[] data, bool response)
         {
 
-            return null;
+            List<string> str = new List<string>();
+
+            foreach(string s in data)
+            {
+                port.WriteLine(s);
+                if (response)
+                    str.Add(port.ReadLine());
+            }
+
+            return str.ToArray();
         }
 
-
-        public void GetBuffer()
+        public override string ToString()
         {
-
-
+            return port.PortName;
         }
-
-        public void PullBuffer()
-        {
-
-
-        }
-
 
     }
 }

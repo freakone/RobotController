@@ -28,12 +28,17 @@ namespace PluginSystem
         public DeviceSettings settings = new DeviceSettings();
         private string config
         {
-            get { return Globals.strConfigFiles + uID + type + ".xml"; }
+            get { return Globals.strConfigFiles + _uID + type + ".xml"; }
         }
 
         protected DeviceClass()
-        {            
-          
+        {
+            for (int i = 0; i < settings.ADC_channels; i++)
+                settings.ADC_Names.Add("Kanał " + i.ToString());
+
+            for (int i = 0; i < settings.MOTOR_channels; i++)
+                settings.ADC_Names.Add("Silnik " + i.ToString());
+
         }
 
         public abstract void GetADCData();
@@ -41,7 +46,7 @@ namespace PluginSystem
         public abstract string[] GetScanCommand();
         public abstract uint[] ParseScanCommand(string[] resp);
 
-
+        public abstract DeviceClass Create();
         public void LoadSettings()
         {
             if (!File.Exists(config))
@@ -54,20 +59,26 @@ namespace PluginSystem
                 }                
             }
 
-            XmlSerializer reader = new XmlSerializer(this.settings.GetType());
+            XmlSerializer reader = new XmlSerializer(this.settings.GetType(), _uID.ToString());
             StreamReader file = new StreamReader(config);            
-            settings = (DeviceSettings)reader.Deserialize(file);
-
-
+            this.settings = (DeviceSettings)reader.Deserialize(file);
+                      
         }
 
         public void SaveSettings()
         {
 
-            XmlSerializer writer = new XmlSerializer(this.settings.GetType());
+            XmlSerializer writer = new XmlSerializer(this.settings.GetType(), _uID.ToString());
             StreamWriter file = new StreamWriter(config);
             writer.Serialize(file, settings);
             file.Close();
+        }
+
+
+        public override string ToString()
+        {
+
+            return this.settings.Name + " (" + this.uID + ")";
         }
        
 

@@ -29,9 +29,10 @@ namespace PluginSystem
         public override string[] GetScanCommand()
         {
             List<string> c = new List<string>();
-            for(int i = 0x11; i < 0xFE; i++)
+          //  for(int i = 0x11; i < 0xFE; i++)
             {
-                c.Add(String.Format("{0:X}{0:X}{0:X}\n", 0xFF, i, 0x70));
+                int i = 0x11;
+                c.Add(((char)0xFF).ToString()+((char)i).ToString()+((char)0x70).ToString()+'\n');
             }
 
             return c.ToArray();
@@ -48,6 +49,11 @@ namespace PluginSystem
             }
 
                 return b.ToArray();
+        }
+
+        public override DeviceClass Create()
+        {
+            return new RBcClient(); 
         }
 
 

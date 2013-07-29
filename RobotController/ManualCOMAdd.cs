@@ -24,6 +24,8 @@ namespace RobotController
         {
             checkedListBox1.Items.Clear();
             checkedListBox1.Items.AddRange(SerialPort.GetPortNames());
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                checkedListBox1.SetItemChecked(i, true);
         }
 
         private void button1_Click(object sender, EventArgs e)

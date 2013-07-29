@@ -50,6 +50,18 @@ namespace PluginSystem
             }
         }
 
+        public static int ContainsPort(string str)
+        {
+            for(int i = 0; i < Globals.serial_ports.Count; i++)
+            {
+                if (Globals.serial_ports[i].ToString() == str)
+                    return i;
+            }
+
+            return -1;
+
+        }
+
         public static string dec2hascii(int liczba, int length)
         {
             return String.Format("{0:X" + length.ToString() +"}", liczba);

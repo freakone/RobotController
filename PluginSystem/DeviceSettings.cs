@@ -28,7 +28,7 @@ namespace PluginSystem
 
 
 
-        private List<string> _MOTOR_Names = new List<string>(new string[] { "Motor 1", "Motor 2", "Motor 3", "Motor 4" });
+        private List<string> _MOTOR_Names = new List<string>();
          [CategoryAttribute("Ustawienia peryferiów"), DescriptionAttribute("Nazwy kanałów do obsługi silników")]
 
         public List<string> MOTOR_Names
@@ -46,9 +46,8 @@ namespace PluginSystem
             set { _ADC_channels = value; }
         }
 
-         private List<string> _ADC_Names = new List<string>(new string[] { "Kanał 1", "Kanał 2", "Kanał 3", "Kanał 4" });
+         private List<string> _ADC_Names = new List<string>();
          [CategoryAttribute("Ustawienia peryferiów"), DescriptionAttribute("Nazwy kanałów ADC")]
-
         public List<string> ADC_Names
         {
             get { return _ADC_Names; }
@@ -71,7 +70,7 @@ namespace PluginSystem
         }
 
 
-        private int baud = 9600;
+        private int baud = 115200;
         [CategoryAttribute("Ustawienia portu"), DescriptionAttribute("Prędkość")]
         public int BaudRate
         {
@@ -99,5 +98,8 @@ namespace PluginSystem
             get { return stop; }
             set { stop = value; }
         }
+
+        public string strEndLine = "\n";
+
     }
 }
