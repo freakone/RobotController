@@ -61,14 +61,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tabPageCurrent = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.analogMeter1 = new Instruments.AnalogMeter();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.analogMeter2 = new Instruments.AnalogMeter();
             this.button7 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.comboBox6 = new System.Windows.Forms.ComboBox();
+            this.comboBoxADCValuesDevice = new System.Windows.Forms.ComboBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -85,6 +80,14 @@
             this.treeViewDevices = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
+            this.comboBoxADCValuesChannel = new System.Windows.Forms.ComboBox();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.comboBoxAnalog1Channel = new System.Windows.Forms.ComboBox();
+            this.comboBoxAnalog1Device = new System.Windows.Forms.ComboBox();
+            this.analogMeter1 = new Instruments.AnalogMeter();
+            this.comboBoxAnalog2Channel = new System.Windows.Forms.ComboBox();
+            this.comboBoxAnalog2Device = new System.Windows.Forms.ComboBox();
+            this.analogMeter2 = new Instruments.AnalogMeter();
             this.menuStrip1.SuspendLayout();
             this.tabControlFunctions.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -98,16 +101,16 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
-            this.splitContainer3.Panel1.SuspendLayout();
-            this.splitContainer3.Panel2.SuspendLayout();
-            this.splitContainer3.SuspendLayout();
             this.tabPageUstawienia.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -132,7 +135,7 @@
             // 
             this.dodajRęcznieToolStripMenuItem.Name = "dodajRęcznieToolStripMenuItem";
             this.dodajRęcznieToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.dodajRęcznieToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dodajRęcznieToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.dodajRęcznieToolStripMenuItem.Text = "Skanuj";
             this.dodajRęcznieToolStripMenuItem.Click += new System.EventHandler(this.dodajRęcznieToolStripMenuItem_Click);
             // 
@@ -349,6 +352,7 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "Start";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -382,85 +386,14 @@
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.comboBoxADCValuesChannel);
             this.splitContainer2.Panel2.Controls.Add(this.button7);
             this.splitContainer2.Panel2.Controls.Add(this.button4);
-            this.splitContainer2.Panel2.Controls.Add(this.comboBox6);
+            this.splitContainer2.Panel2.Controls.Add(this.comboBoxADCValuesDevice);
             this.splitContainer2.Panel2.Controls.Add(this.listView1);
             this.splitContainer2.Size = new System.Drawing.Size(650, 425);
             this.splitContainer2.SplitterDistance = 170;
             this.splitContainer2.TabIndex = 2;
-            // 
-            // splitContainer3
-            // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.IsSplitterFixed = true;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer3.Name = "splitContainer3";
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.comboBox4);
-            this.splitContainer3.Panel1.Controls.Add(this.analogMeter1);
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.comboBox5);
-            this.splitContainer3.Panel2.Controls.Add(this.analogMeter2);
-            this.splitContainer3.Size = new System.Drawing.Size(650, 170);
-            this.splitContainer3.SplitterDistance = 325;
-            this.splitContainer3.TabIndex = 0;
-            // 
-            // comboBox4
-            // 
-            this.comboBox4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(0, 149);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(325, 21);
-            this.comboBox4.TabIndex = 1;
-            // 
-            // analogMeter1
-            // 
-            this.analogMeter1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.analogMeter1.FrameColor = System.Drawing.Color.Black;
-            this.analogMeter1.FramePadding = new System.Windows.Forms.Padding(5);
-            this.analogMeter1.InternalPadding = new System.Windows.Forms.Padding(5);
-            this.analogMeter1.Location = new System.Drawing.Point(0, 0);
-            this.analogMeter1.MaxValue = 15F;
-            this.analogMeter1.MinValue = 0F;
-            this.analogMeter1.Name = "analogMeter1";
-            this.analogMeter1.Size = new System.Drawing.Size(325, 173);
-            this.analogMeter1.TabIndex = 0;
-            this.analogMeter1.Text = "analogMeter1";
-            this.analogMeter1.TickStartAngle = 20F;
-            this.analogMeter1.Value = 3F;
-            // 
-            // comboBox5
-            // 
-            this.comboBox5.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(0, 149);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(321, 21);
-            this.comboBox5.TabIndex = 2;
-            // 
-            // analogMeter2
-            // 
-            this.analogMeter2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.analogMeter2.FrameColor = System.Drawing.Color.Black;
-            this.analogMeter2.FramePadding = new System.Windows.Forms.Padding(5);
-            this.analogMeter2.InternalPadding = new System.Windows.Forms.Padding(5);
-            this.analogMeter2.Location = new System.Drawing.Point(0, 0);
-            this.analogMeter2.MaxValue = 15F;
-            this.analogMeter2.MinValue = 0F;
-            this.analogMeter2.Name = "analogMeter2";
-            this.analogMeter2.Size = new System.Drawing.Size(321, 173);
-            this.analogMeter2.TabIndex = 1;
-            this.analogMeter2.Text = "analogMeter2";
-            this.analogMeter2.TickStartAngle = 20F;
-            this.analogMeter2.Value = 0F;
             // 
             // button7
             // 
@@ -480,14 +413,15 @@
             this.button4.Text = "Dodaj";
             this.button4.UseVisualStyleBackColor = true;
             // 
-            // comboBox6
+            // comboBoxADCValuesDevice
             // 
-            this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(3, 227);
-            this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(358, 21);
-            this.comboBox6.TabIndex = 1;
+            this.comboBoxADCValuesDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxADCValuesDevice.FormattingEnabled = true;
+            this.comboBoxADCValuesDevice.Location = new System.Drawing.Point(3, 227);
+            this.comboBoxADCValuesDevice.Name = "comboBoxADCValuesDevice";
+            this.comboBoxADCValuesDevice.Size = new System.Drawing.Size(189, 21);
+            this.comboBoxADCValuesDevice.TabIndex = 1;
+            this.comboBoxADCValuesDevice.SelectedIndexChanged += new System.EventHandler(this.comboBoxADCValuesDevice_SelectedIndexChanged);
             // 
             // listView1
             // 
@@ -609,7 +543,6 @@
             this.treeViewDevices.Name = "treeViewDevices";
             this.treeViewDevices.Size = new System.Drawing.Size(150, 483);
             this.treeViewDevices.TabIndex = 5;
-            this.treeViewDevices.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewDevices_AfterSelect);
             // 
             // splitContainer1
             // 
@@ -628,6 +561,112 @@
             this.splitContainer1.Size = new System.Drawing.Size(826, 483);
             this.splitContainer1.SplitterDistance = 150;
             this.splitContainer1.TabIndex = 6;
+            // 
+            // comboBoxADCValuesChannel
+            // 
+            this.comboBoxADCValuesChannel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxADCValuesChannel.FormattingEnabled = true;
+            this.comboBoxADCValuesChannel.Location = new System.Drawing.Point(198, 227);
+            this.comboBoxADCValuesChannel.Name = "comboBoxADCValuesChannel";
+            this.comboBoxADCValuesChannel.Size = new System.Drawing.Size(163, 21);
+            this.comboBoxADCValuesChannel.TabIndex = 4;
+            this.comboBoxADCValuesChannel.SelectedIndexChanged += new System.EventHandler(this.comboBoxADCValuesChannel_SelectedIndexChanged);
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.IsSplitterFixed = true;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.Name = "splitContainer3";
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.comboBoxAnalog1Channel);
+            this.splitContainer3.Panel1.Controls.Add(this.comboBoxAnalog1Device);
+            this.splitContainer3.Panel1.Controls.Add(this.analogMeter1);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.comboBoxAnalog2Channel);
+            this.splitContainer3.Panel2.Controls.Add(this.comboBoxAnalog2Device);
+            this.splitContainer3.Panel2.Controls.Add(this.analogMeter2);
+            this.splitContainer3.Size = new System.Drawing.Size(650, 170);
+            this.splitContainer3.SplitterDistance = 325;
+            this.splitContainer3.TabIndex = 0;
+            // 
+            // comboBoxAnalog1Channel
+            // 
+            this.comboBoxAnalog1Channel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalog1Channel.FormattingEnabled = true;
+            this.comboBoxAnalog1Channel.Location = new System.Drawing.Point(182, 149);
+            this.comboBoxAnalog1Channel.Name = "comboBoxAnalog1Channel";
+            this.comboBoxAnalog1Channel.Size = new System.Drawing.Size(140, 21);
+            this.comboBoxAnalog1Channel.TabIndex = 2;
+            this.comboBoxAnalog1Channel.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalog1Channel_SelectedIndexChanged);
+            // 
+            // comboBoxAnalog1Device
+            // 
+            this.comboBoxAnalog1Device.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalog1Device.FormattingEnabled = true;
+            this.comboBoxAnalog1Device.Location = new System.Drawing.Point(0, 149);
+            this.comboBoxAnalog1Device.Name = "comboBoxAnalog1Device";
+            this.comboBoxAnalog1Device.Size = new System.Drawing.Size(140, 21);
+            this.comboBoxAnalog1Device.TabIndex = 1;
+            this.comboBoxAnalog1Device.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalog1Device_SelectedIndexChanged);
+            // 
+            // analogMeter1
+            // 
+            this.analogMeter1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.analogMeter1.FrameColor = System.Drawing.Color.Black;
+            this.analogMeter1.FramePadding = new System.Windows.Forms.Padding(5);
+            this.analogMeter1.InternalPadding = new System.Windows.Forms.Padding(5);
+            this.analogMeter1.Location = new System.Drawing.Point(0, 0);
+            this.analogMeter1.MaxValue = 15F;
+            this.analogMeter1.MinValue = 0F;
+            this.analogMeter1.Name = "analogMeter1";
+            this.analogMeter1.Size = new System.Drawing.Size(325, 173);
+            this.analogMeter1.TabIndex = 0;
+            this.analogMeter1.Text = "analogMeter1";
+            this.analogMeter1.TickStartAngle = 20F;
+            this.analogMeter1.Value = 3F;
+            // 
+            // comboBoxAnalog2Channel
+            // 
+            this.comboBoxAnalog2Channel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalog2Channel.DropDownWidth = 158;
+            this.comboBoxAnalog2Channel.FormattingEnabled = true;
+            this.comboBoxAnalog2Channel.Location = new System.Drawing.Point(178, 149);
+            this.comboBoxAnalog2Channel.Name = "comboBoxAnalog2Channel";
+            this.comboBoxAnalog2Channel.Size = new System.Drawing.Size(140, 21);
+            this.comboBoxAnalog2Channel.TabIndex = 3;
+            this.comboBoxAnalog2Channel.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalog2Channel_SelectedIndexChanged);
+            // 
+            // comboBoxAnalog2Device
+            // 
+            this.comboBoxAnalog2Device.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalog2Device.DropDownWidth = 158;
+            this.comboBoxAnalog2Device.FormattingEnabled = true;
+            this.comboBoxAnalog2Device.Location = new System.Drawing.Point(3, 149);
+            this.comboBoxAnalog2Device.Name = "comboBoxAnalog2Device";
+            this.comboBoxAnalog2Device.Size = new System.Drawing.Size(140, 21);
+            this.comboBoxAnalog2Device.TabIndex = 2;
+            this.comboBoxAnalog2Device.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalog2Device_SelectedIndexChanged);
+            // 
+            // analogMeter2
+            // 
+            this.analogMeter2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.analogMeter2.FrameColor = System.Drawing.Color.Black;
+            this.analogMeter2.FramePadding = new System.Windows.Forms.Padding(5);
+            this.analogMeter2.InternalPadding = new System.Windows.Forms.Padding(5);
+            this.analogMeter2.Location = new System.Drawing.Point(0, 0);
+            this.analogMeter2.MaxValue = 15F;
+            this.analogMeter2.MinValue = 0F;
+            this.analogMeter2.Name = "analogMeter2";
+            this.analogMeter2.Size = new System.Drawing.Size(321, 173);
+            this.analogMeter2.TabIndex = 1;
+            this.analogMeter2.Text = "analogMeter2";
+            this.analogMeter2.TickStartAngle = 20F;
+            this.analogMeter2.Value = 0F;
             // 
             // MainForm
             // 
@@ -655,10 +694,6 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
             this.tabPageUstawienia.ResumeLayout(false);
             this.tabPageUstawienia.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -667,6 +702,10 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -708,13 +747,13 @@
         private System.Windows.Forms.PageSetupDialog pageSetupDialog1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer3;
-        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.ComboBox comboBoxAnalog1Device;
         private Instruments.AnalogMeter analogMeter1;
-        private System.Windows.Forms.ComboBox comboBox5;
+        private System.Windows.Forms.ComboBox comboBoxAnalog2Device;
         private Instruments.AnalogMeter analogMeter2;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.ComboBox comboBox6;
+        private System.Windows.Forms.ComboBox comboBoxADCValuesDevice;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -724,6 +763,9 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ComboBox comboBoxChannelX;
         private System.Windows.Forms.ComboBox comboBoxChannelY;
+        private System.Windows.Forms.ComboBox comboBoxAnalog1Channel;
+        private System.Windows.Forms.ComboBox comboBoxAnalog2Channel;
+        private System.Windows.Forms.ComboBox comboBoxADCValuesChannel;
     }
 }
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace PluginSystem
 {
@@ -45,6 +46,9 @@ namespace PluginSystem
             port.Parity = s.DataParity;
             port.StopBits = s.DataStopBits;
             port.NewLine = s.strEndLine;
+
+            port.Close();
+            port.Open();
         }
 
  
@@ -63,12 +67,13 @@ namespace PluginSystem
 
             try
             {
-                port.WriteLine("");
-                port.BaseStream.Flush();
                 port.DiscardInBuffer();
-                port.DiscardOutBuffer();
-              
-                port.WriteLine(data);
+                port.DiscardOutBuffer();         
+            
+                foreach(char c in data)
+                    port.Write(new byte[]{(byte)c}, 0, 1);
+
+                port.WriteLine("");
                 port.BaseStream.Flush();
 
                 if(response)

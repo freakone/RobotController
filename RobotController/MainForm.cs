@@ -25,18 +25,14 @@ namespace RobotController
             Globals.strPluginFiles = Application.StartupPath + Path.DirectorySeparatorChar + "plugin_files" + Path.DirectorySeparatorChar;
 
             if (!Directory.Exists(Globals.strConfigFiles))
-                Directory.CreateDirectory(Globals.strConfigFiles);            
+                Directory.CreateDirectory(Globals.strConfigFiles);
 
             Globals.LoadDlls();
            
         }
 
-       
- 
-        private void skanujToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-     
-        }
+
+        #region forma glowna
 
         public void SetStatus(object sender, SetStatusEventArgs e)
         {
@@ -74,6 +70,10 @@ namespace RobotController
             
         }
 
+        #endregion
+
+        #region skanowanie
+
         private readonly int[] bauds = new int[] { 115200 };
         private Thread scanThread;
         void DeviceScan(string[] COM)
@@ -104,9 +104,9 @@ namespace RobotController
 
 
                     for (int b = 0; b < bauds.Length; b++)
-                    {
-                        node.SetParameters(ds);
+                    {                        
                         ds.BaudRate = bauds[b];
+                        node.SetParameters(ds);
                         resps[b] = new string[cmds.Length];
                         for (int c = 0; c < cmds.Length; c++)
                         {
@@ -180,6 +180,12 @@ namespace RobotController
                 comboBoxChannelY.Items.Clear();
                 comboBoxDeviceX.Items.Clear();
                 comboBoxDeviceY.Items.Clear();
+                comboBoxADCValuesChannel.Items.Clear();
+                comboBoxADCValuesDevice.Items.Clear();
+                comboBoxAnalog1Channel.Items.Clear();
+                comboBoxAnalog2Channel.Items.Clear();
+                comboBoxAnalog2Device.Items.Clear();
+                comboBoxAnalog1Device.Items.Clear();
 
                 foreach (DeviceClass d in Globals.loaded_modules)
                 {
@@ -190,6 +196,9 @@ namespace RobotController
                     {
                         comboBoxDeviceX.Items.Add(d.ToString());
                         comboBoxDeviceY.Items.Add(d.ToString());
+                        comboBoxADCValuesDevice.Items.Add(d.ToString());
+                        comboBoxAnalog2Device.Items.Add(d.ToString());
+                        comboBoxAnalog1Device.Items.Add(d.ToString());
 
                     }
 
@@ -199,9 +208,61 @@ namespace RobotController
                 {
                     comboBoxDeviceX.SelectedIndex = 0;
                     comboBoxDeviceY.SelectedIndex = 0;
+                    comboBoxADCValuesDevice.SelectedIndex = 0;
+                    comboBoxAnalog2Device.SelectedIndex = 0;
+                    comboBoxAnalog1Device.SelectedIndex = 0;
                 }
             }
    
+        }
+
+        #endregion
+
+        #region ADC
+
+        public void SetAnalogVal(int i, AnalogMeter a)
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new MethodInvoker(delegate()
+                {
+                    a.Value = i;
+
+                }));
+            else
+            {
+                a.Value = i;
+            }
+        }
+
+        delegate int ComboDelegate(ComboBox c);
+        public int GetComboIndex(ComboBox c)
+        {
+            if (this.InvokeRequired)
+               return (int)this.Invoke(new ComboDelegate(GetComboIndex), new object[] {c});               
+            else
+            {
+                return c.SelectedIndex;
+            }
+        }
+
+        Thread threadADC;
+        private void ADCScan()
+        {
+            while (true)
+            {
+
+                int device = GetComboIndex(comboBoxAnalog1Device);
+                int channel = GetComboIndex(comboBoxAnalog1Channel);
+                int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
+
+                string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
+                int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
+
+                SetAnalogVal(vals[channel], analogMeter1);
+
+                Thread.Sleep(500);
+            }
+
         }
 
         private void comboBoxDeviceX_SelectedIndexChanged(object sender, EventArgs e)
@@ -239,9 +300,87 @@ namespace RobotController
             comboBoxChannelY.SelectedIndex = 0;
         }
 
-        private void treeViewDevices_AfterSelect(object sender, TreeViewEventArgs e)
+
+        private void comboBoxAnalog1Device_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxAnalog1Device.SelectedIndex < 0)
+                return;
+
+            comboBoxAnalog1Channel.Items.Clear();
+
+            DeviceSettings sett = Globals.loaded_modules[comboBoxAnalog1Device.SelectedIndex].settings;
+
+            for (int i = 0; i < sett.ADC_channels; i++)
+            {
+                comboBoxAnalog1Channel.Items.Add(sett.ADC_Names[i]);
+            }
+
+            comboBoxAnalog1Channel.SelectedIndex = 0;
+        }
+
+        private void comboBoxAnalog1Channel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxAnalog1Channel.SelectedIndex < 0)
+                return;
+
+            analogMeter1.MaxValue = Globals.loaded_modules[comboBoxAnalog1Device.SelectedIndex].settings.ADC_max;
+        }
+
+        private void comboBoxAnalog2Device_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxAnalog2Device.SelectedIndex < 0)
+                return;
+
+            comboBoxAnalog2Channel.Items.Clear();
+
+            DeviceSettings sett = Globals.loaded_modules[comboBoxAnalog2Device.SelectedIndex].settings;
+
+            for (int i = 0; i < sett.ADC_channels; i++)
+            {
+                comboBoxAnalog2Channel.Items.Add(sett.ADC_Names[i]);
+            }
+
+            comboBoxAnalog2Channel.SelectedIndex = 0;
+        }
+
+        private void comboBoxAnalog2Channel_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
+
+        private void comboBoxADCValuesDevice_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxADCValuesDevice.SelectedIndex < 0)
+                return;
+
+            comboBoxADCValuesChannel.Items.Clear();
+
+            DeviceSettings sett = Globals.loaded_modules[comboBoxADCValuesDevice.SelectedIndex].settings;
+
+            for (int i = 0; i < sett.ADC_channels; i++)
+            {
+                comboBoxADCValuesChannel.Items.Add(sett.ADC_Names[i]);
+            }
+
+            comboBoxADCValuesChannel.SelectedIndex = 0;
+        }
+
+        private void comboBoxADCValuesChannel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (threadADC != null && threadADC.IsAlive)
+                threadADC.Abort();
+
+            threadADC = new Thread(new ThreadStart(ADCScan));
+            threadADC.Start();
+        }
+
+
     }
 }

@@ -16,9 +16,26 @@ namespace PluginSystem
           
         }
 
-        public override void GetADCData()
+        public override string GetADCCommand()
         {
-            throw new NotImplementedException();
+            return String.Format("{0}{1}{2}", (char)0xff, (char)this.uID, (char)0x61);
+        }
+
+        public override int[] ParseADCCommand(string resp)
+        {
+            if (resp.Length < this.settings.ADC_channels*3 + 2)
+                return null;
+
+            int[] vals = new int[this.settings.ADC_channels];
+            
+            for (int i = 0; i < this.settings.ADC_channels; i++ )
+            {
+                vals[i] = Globals.hascii2dec(resp.Substring(3 + (i * 3), 3));
+            }
+
+
+            return vals;
+
         }
         public override void SetMOTOR(int id, int value)
         {
@@ -32,7 +49,7 @@ namespace PluginSystem
           //  for(int i = 0x11; i < 0xFE; i++)
             {
                 int i = 0x11;
-                c.Add(((char)0xFF).ToString()+((char)i).ToString()+((char)0x70).ToString()+'\n');
+                c.Add(String.Format("{0}{1}{2}", (char)0xFF, (char)i, (char)0x70));
             }
 
             return c.ToArray();

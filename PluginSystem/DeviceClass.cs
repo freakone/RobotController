@@ -41,7 +41,8 @@ namespace PluginSystem
 
         }
 
-        public abstract void GetADCData();
+        public abstract string GetADCCommand();
+        public abstract int[] ParseADCCommand(string resp);
         public abstract void SetMOTOR(int id, int value);
         public abstract string[] GetScanCommand();
         public abstract uint[] ParseScanCommand(string[] resp);
