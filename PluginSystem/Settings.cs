@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace PluginSystem
 {
-    class Settings
+    public class Settings
     {
 
         public static int iPortTimeout = 300;
+        public static int iADCInterval = 50;
 
       
         public static void LoadSettings()

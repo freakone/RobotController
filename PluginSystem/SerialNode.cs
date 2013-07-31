@@ -12,7 +12,7 @@ namespace PluginSystem
     public class SerialNode
     {
         private SerialPort port;
-        private Mutex m;
+        private static readonly object m_oPadlock = new object();
         public bool bError = false;
         public SerialNode(string com)
         {
@@ -41,14 +41,16 @@ namespace PluginSystem
 
         public void SetParameters(DeviceSettings s)
         {
-            port.BaudRate = s.BaudRate;
-            port.DataBits = s.DataBits;
-            port.Parity = s.DataParity;
-            port.StopBits = s.DataStopBits;
-            port.NewLine = s.strEndLine;
 
-            port.Close();
-            port.Open();
+            lock (m_oPadlock)
+            {
+                port.BaudRate = s.BaudRate;
+                port.DataBits = s.DataBits;
+                port.Parity = s.DataParity;
+                port.StopBits = s.DataStopBits;
+                port.NewLine = s.strEndLine;
+
+            }
         }
 
  
@@ -59,40 +61,44 @@ namespace PluginSystem
 
         public string SendData(string data, bool response)
         {
-            if (!port.IsOpen)
-                OpenPort();
-
-            if (bError)
-                return "";
-
-            try
+            lock (m_oPadlock)
             {
-                port.DiscardInBuffer();
-                port.DiscardOutBuffer();         
-            
-                foreach(char c in data)
-                    port.Write(new byte[]{(byte)c}, 0, 1);
+                if (!port.IsOpen)
+                    OpenPort();
 
-                port.WriteLine("");
-                port.BaseStream.Flush();
-
-                if(response)
-                {
-                    return port.ReadLine();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                if (ex is TimeoutException)
+                if (bError)
                     return "";
 
-                bError = true;
-                Globals.StatusCall(ex.ToString(), Globals.status_error);
-                port.Close();
-            }
+                try
+                {
+                    port.DiscardInBuffer();
+                    port.DiscardOutBuffer();
 
-            return "";
+                    foreach (char c in data)
+                        port.Write(new byte[] { (byte)c }, 0, 1);
+
+                    port.WriteLine("");
+                    port.BaseStream.Flush();
+
+                    if (response)
+                    {
+                        return port.ReadLine();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    if (ex is TimeoutException)
+                        return "";
+
+                    bError = true;
+                    Globals.StatusCall(ex.ToString(), Globals.status_error);
+                    port.Close();
+                }
+
+                return "";
+
+            }
         }
 
         public string[] SendData(string[] data, bool response)
