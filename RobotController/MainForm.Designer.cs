@@ -45,7 +45,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.comboBoxChannelY = new System.Windows.Forms.ComboBox();
             this.comboBoxChannelX = new System.Windows.Forms.ComboBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBoxSeriesName = new System.Windows.Forms.TextBox();
             this.btnChartAddSeries = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxDeviceX = new System.Windows.Forms.ComboBox();
@@ -62,9 +62,11 @@
             this.checkBoxAnalog1 = new System.Windows.Forms.CheckBox();
             this.comboBoxAnalog1Channel = new System.Windows.Forms.ComboBox();
             this.comboBoxAnalog1Device = new System.Windows.Forms.ComboBox();
+            this.analogMeter1 = new Instruments.AnalogMeter();
             this.checkBoxAnalog2 = new System.Windows.Forms.CheckBox();
             this.comboBoxAnalog2Channel = new System.Windows.Forms.ComboBox();
             this.comboBoxAnalog2Device = new System.Windows.Forms.ComboBox();
+            this.analogMeter2 = new Instruments.AnalogMeter();
             this.checkBoxADCTable = new System.Windows.Forms.CheckBox();
             this.comboBoxADCValuesChannel = new System.Windows.Forms.ComboBox();
             this.button7 = new System.Windows.Forms.Button();
@@ -75,10 +77,6 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageUstawienia = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -86,8 +84,10 @@
             this.treeViewDevices = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
-            this.analogMeter1 = new Instruments.AnalogMeter();
-            this.analogMeter2 = new Instruments.AnalogMeter();
+            this.numericUpDownADCRefresh = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tabControlFunctions.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -111,6 +111,7 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownADCRefresh)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -223,7 +224,7 @@
             // 
             this.groupBox1.Controls.Add(this.comboBoxChannelY);
             this.groupBox1.Controls.Add(this.comboBoxChannelX);
-            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.textBoxSeriesName);
             this.groupBox1.Controls.Add(this.btnChartAddSeries);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.comboBoxDeviceX);
@@ -254,12 +255,12 @@
             this.comboBoxChannelX.Size = new System.Drawing.Size(121, 21);
             this.comboBoxChannelX.TabIndex = 13;
             // 
-            // textBox2
+            // textBoxSeriesName
             // 
-            this.textBox2.Location = new System.Drawing.Point(9, 73);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(217, 20);
-            this.textBox2.TabIndex = 12;
+            this.textBoxSeriesName.Location = new System.Drawing.Point(9, 73);
+            this.textBoxSeriesName.Name = "textBoxSeriesName";
+            this.textBoxSeriesName.Size = new System.Drawing.Size(217, 20);
+            this.textBoxSeriesName.TabIndex = 12;
             // 
             // btnChartAddSeries
             // 
@@ -445,6 +446,23 @@
             this.comboBoxAnalog1Device.TabIndex = 1;
             this.comboBoxAnalog1Device.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalog1Device_SelectedIndexChanged);
             // 
+            // analogMeter1
+            // 
+            this.analogMeter1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.analogMeter1.FrameColor = System.Drawing.Color.Black;
+            this.analogMeter1.FramePadding = new System.Windows.Forms.Padding(5);
+            this.analogMeter1.InternalPadding = new System.Windows.Forms.Padding(5);
+            this.analogMeter1.Location = new System.Drawing.Point(0, 0);
+            this.analogMeter1.MaxValue = 15F;
+            this.analogMeter1.MinValue = 0F;
+            this.analogMeter1.Name = "analogMeter1";
+            this.analogMeter1.Size = new System.Drawing.Size(325, 173);
+            this.analogMeter1.Stretch = true;
+            this.analogMeter1.TabIndex = 0;
+            this.analogMeter1.Text = "analogMeter1";
+            this.analogMeter1.TickStartAngle = 20F;
+            this.analogMeter1.Value = 3F;
+            // 
             // checkBoxAnalog2
             // 
             this.checkBoxAnalog2.AutoSize = true;
@@ -476,10 +494,26 @@
             this.comboBoxAnalog2Device.TabIndex = 2;
             this.comboBoxAnalog2Device.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalog2Device_SelectedIndexChanged);
             // 
+            // analogMeter2
+            // 
+            this.analogMeter2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.analogMeter2.FrameColor = System.Drawing.Color.Black;
+            this.analogMeter2.FramePadding = new System.Windows.Forms.Padding(5);
+            this.analogMeter2.InternalPadding = new System.Windows.Forms.Padding(5);
+            this.analogMeter2.Location = new System.Drawing.Point(0, 0);
+            this.analogMeter2.MaxValue = 15F;
+            this.analogMeter2.MinValue = 0F;
+            this.analogMeter2.Name = "analogMeter2";
+            this.analogMeter2.Size = new System.Drawing.Size(321, 173);
+            this.analogMeter2.TabIndex = 1;
+            this.analogMeter2.Text = "analogMeter2";
+            this.analogMeter2.TickStartAngle = 20F;
+            this.analogMeter2.Value = 0F;
+            // 
             // checkBoxADCTable
             // 
             this.checkBoxADCTable.AutoSize = true;
-            this.checkBoxADCTable.Location = new System.Drawing.Point(530, 227);
+            this.checkBoxADCTable.Location = new System.Drawing.Point(529, 229);
             this.checkBoxADCTable.Name = "checkBoxADCTable";
             this.checkBoxADCTable.Size = new System.Drawing.Size(58, 17);
             this.checkBoxADCTable.TabIndex = 5;
@@ -560,47 +594,13 @@
             this.tabPageUstawienia.Controls.Add(this.textBox1);
             this.tabPageUstawienia.Controls.Add(this.label4);
             this.tabPageUstawienia.Controls.Add(this.label1);
-            this.tabPageUstawienia.Controls.Add(this.comboBox1);
+            this.tabPageUstawienia.Controls.Add(this.numericUpDownADCRefresh);
             this.tabPageUstawienia.Location = new System.Drawing.Point(4, 22);
             this.tabPageUstawienia.Name = "tabPageUstawienia";
             this.tabPageUstawienia.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageUstawienia.Size = new System.Drawing.Size(650, 425);
             this.tabPageUstawienia.TabIndex = 0;
             this.tabPageUstawienia.Text = "Ustawienia";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(118, 50);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 12;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 50);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 13);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Tytuł wykresu";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Typ wykresu";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(118, 20);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 9;
             // 
             // tabPage2
             // 
@@ -663,38 +663,47 @@
             this.splitContainer1.SplitterDistance = 150;
             this.splitContainer1.TabIndex = 6;
             // 
-            // analogMeter1
+            // numericUpDownADCRefresh
             // 
-            this.analogMeter1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.analogMeter1.FrameColor = System.Drawing.Color.Black;
-            this.analogMeter1.FramePadding = new System.Windows.Forms.Padding(5);
-            this.analogMeter1.InternalPadding = new System.Windows.Forms.Padding(5);
-            this.analogMeter1.Location = new System.Drawing.Point(0, 0);
-            this.analogMeter1.MaxValue = 15F;
-            this.analogMeter1.MinValue = 0F;
-            this.analogMeter1.Name = "analogMeter1";
-            this.analogMeter1.Size = new System.Drawing.Size(325, 173);
-            this.analogMeter1.Stretch = true;
-            this.analogMeter1.TabIndex = 0;
-            this.analogMeter1.Text = "analogMeter1";
-            this.analogMeter1.TickStartAngle = 20F;
-            this.analogMeter1.Value = 3F;
+            this.numericUpDownADCRefresh.Location = new System.Drawing.Point(137, 17);
+            this.numericUpDownADCRefresh.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDownADCRefresh.Name = "numericUpDownADCRefresh";
+            this.numericUpDownADCRefresh.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownADCRefresh.TabIndex = 0;
+            this.numericUpDownADCRefresh.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             // 
-            // analogMeter2
+            // label1
             // 
-            this.analogMeter2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.analogMeter2.FrameColor = System.Drawing.Color.Black;
-            this.analogMeter2.FramePadding = new System.Windows.Forms.Padding(5);
-            this.analogMeter2.InternalPadding = new System.Windows.Forms.Padding(5);
-            this.analogMeter2.Location = new System.Drawing.Point(0, 0);
-            this.analogMeter2.MaxValue = 15F;
-            this.analogMeter2.MinValue = 0F;
-            this.analogMeter2.Name = "analogMeter2";
-            this.analogMeter2.Size = new System.Drawing.Size(321, 173);
-            this.analogMeter2.TabIndex = 1;
-            this.analogMeter2.Text = "analogMeter2";
-            this.analogMeter2.TickStartAngle = 20F;
-            this.analogMeter2.Value = 0F;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(111, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Częstość odświeżania";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 47);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(105, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Przeliczanie wartości";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(137, 44);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 3;
             // 
             // MainForm
             // 
@@ -739,6 +748,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownADCRefresh)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -765,14 +775,10 @@
         private System.Windows.Forms.ComboBox comboBoxDeviceX;
         private System.Windows.Forms.TabPage tabPageCurrent;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.ListBox listBoxChartSeries;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBoxSeriesName;
         private System.Windows.Forms.Button btnChartAddSeries;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem zapiszWykresToolStripMenuItem;
@@ -802,6 +808,10 @@
         private System.Windows.Forms.CheckBox checkBoxAnalog1;
         private System.Windows.Forms.CheckBox checkBoxAnalog2;
         private System.Windows.Forms.CheckBox checkBoxADCTable;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numericUpDownADCRefresh;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label4;
     }
 }
 

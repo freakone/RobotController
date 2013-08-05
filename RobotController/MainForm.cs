@@ -285,28 +285,31 @@ namespace RobotController
         {
             while (true)
             {
-                /*
-                int device = GetComboIndex(comboBoxAnalog1Device);
-                int channel = GetComboIndex(comboBoxAnalog1Channel);
-                int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
-
-                string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
-                int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
-
-                SetAnalogVal(vals[channel], analogMeter1);
-                
-         
-                foreach (int[] i in chart_series)
+                if (GetCheckBoxSelected(checkBoxAnalog1))
                 {
-                    int device = i[0];
-                    int channel = i[1];
+                    int device = GetComboIndex(comboBoxAnalog1Device);
+                    int channel = GetComboIndex(comboBoxAnalog1Channel);
                     int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
 
-                    if(i[0] == i[1])
+                    string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
+                    int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
 
-                    string resp1 = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
-                    int[] vals1 = Globals.loaded_modules[device].ParseADCCommand(resp);
-                }*/
+                    SetAnalogVal(vals[channel], analogMeter1);
+                }
+
+                if (GetCheckBoxSelected(checkBoxAnalog2))
+                {
+                    int device = GetComboIndex(comboBoxAnalog2Device);
+                    int channel = GetComboIndex(comboBoxAnalog2Channel);
+                    int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
+
+                    string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
+                    int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
+
+                    SetAnalogVal(vals[channel], analogMeter2);
+
+                }
+
                 if(GetCheckBoxSelected(checkBoxChart))
                 {
                     int device = GetComboIndex(comboBoxDeviceY);
@@ -328,7 +331,17 @@ namespace RobotController
         List<int[]> chart_series = new List<int[]>();
         private void btnChartAddSeries_Click(object sender, EventArgs e)
         {
-            chart_series.Add(new int[4] { comboBoxDeviceX.SelectedIndex, comboBoxChannelX.SelectedIndex, comboBoxDeviceY.SelectedIndex, comboBoxChannelY.SelectedIndex });
+            if (textBoxSeriesName.Text.Length == 0)
+                return;
+
+            chart_series.Add(new int[4] { comboBoxDeviceX.SelectedIndex == comboBoxDeviceX.Items.Count - 1 ? -1 : comboBoxDeviceX.SelectedIndex, comboBoxChannelX.SelectedIndex, comboBoxDeviceY.SelectedIndex == comboBoxDeviceY.Items.Count - 1 ? -1 : comboBoxDeviceY.SelectedIndex, comboBoxChannelY.SelectedIndex });
+            chart1.Series.Clear();
+
+            Series s = new Series(textBoxSeriesName.Text);
+            s.ChartType = SeriesChartType.Spline;
+            s.Points.Clear();
+            chart1.Series.Add(s);
+            
             RefreshSeriesList();
         }
 
@@ -336,23 +349,9 @@ namespace RobotController
         {
             listBoxChartSeries.Items.Clear();
 
-            foreach(int[] i in chart_series)
-            {
-                string x = "Czas";
-                string y = "Czas";
-                if (i[0] != comboBoxDeviceX.Items.Count - 1)
-                    x = Globals.loaded_modules[i[0]].settings.ADC_Names[i[1]];
-                if (i[2] != comboBoxDeviceY.Items.Count - 1)
-                    y = Globals.loaded_modules[i[2]].settings.ADC_Names[i[3]];
-
-                listBoxChartSeries.Items.Add("X: " + x + "Y: " + y);
-
-                chart1.Series.Clear();
-
-                Series s = new Series("test");
-                s.ChartType = SeriesChartType.Spline;
-                s.Points.Clear();
-                chart1.Series.Add(s);
+            foreach(Series s in chart1.Series)
+            {              
+                listBoxChartSeries.Items.Add(s.Name);                
             }
 
         }
@@ -432,6 +431,7 @@ namespace RobotController
             analogMeter1.TickLargeFrequency = (int)(analogMeter1.MaxValue / 4);
             analogMeter1.TickSmallFrequency = (int)(analogMeter1.TickLargeFrequency / 2);
             analogMeter1.TickTinyFrequency =  (int)(analogMeter1.TickSmallFrequency / 5);
+            analogMeter1.Text = comboBoxAnalog1Channel.Text;
         }
 
         private void comboBoxAnalog2Device_SelectedIndexChanged(object sender, EventArgs e)
@@ -453,7 +453,14 @@ namespace RobotController
 
         private void comboBoxAnalog2Channel_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBoxAnalog2Channel.SelectedIndex < 0)
+                return;
 
+            analogMeter2.MaxValue = Globals.loaded_modules[comboBoxAnalog2Device.SelectedIndex].settings.ADC_max;
+            analogMeter2.TickLargeFrequency = (int)(analogMeter2.MaxValue / 4);
+            analogMeter2.TickSmallFrequency = (int)(analogMeter2.TickLargeFrequency / 2);
+            analogMeter2.TickTinyFrequency = (int)(analogMeter2.TickSmallFrequency / 5);
+            analogMeter2.Text = comboBoxAnalog2Channel.Text;
         }
 
         private void comboBoxADCValuesDevice_SelectedIndexChanged(object sender, EventArgs e)

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DeviceSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="17">
+  <par>None</par>
+  <strEndLine>
+</strEndLine>
+  <Name>RBc</Name>
+  <MOTOR_channels>4</MOTOR_channels>
+  <MOTOR_Names />
+  <ADC_channels>4</ADC_channels>
+  <ADC_Names>
+    <string>Kanał 0</string>
+    <string>Kanał 1</string>
+    <string>Kanał 2</string>
+    <string>Kanał 3</string>
+    <string>Silnik 0</string>
+    <string>Silnik 1</string>
+    <string>Silnik 2</string>
+    <string>Silnik 3</string>
+  </ADC_Names>
+  <ADC_max>4096</ADC_max>
+  <MOTOR_max>4096</MOTOR_max>
+  <BaudRate>115200</BaudRate>
+  <DataBits>8</DataBits>
+  <DataParity>None</DataParity>
+  <DataStopBits>One</DataStopBits>
+</DeviceSettings>
