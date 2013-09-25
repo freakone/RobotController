@@ -43,7 +43,9 @@ namespace PluginSystem
 
         public abstract string GetADCCommand();
         public abstract int[] ParseADCCommand(string resp);
-        public abstract void SetMOTOR(int id, int value);
+        public abstract string GetMOTORIncCommand();
+        public abstract string GetMOTORDecCommand();
+        public abstract string GetMOTORSetCommand(int num, int val);
         public abstract string[] GetScanCommand();
         public abstract uint[] ParseScanCommand(string[] resp);
 
@@ -80,6 +82,16 @@ namespace PluginSystem
         {
 
             return this.settings.Name + " (" + this.uID + ")";
+        }
+
+        public string dec2hascii(int liczba, int length)
+        {
+            return String.Format("{0:X" + length.ToString() + "}", liczba);
+        }
+
+        public int hascii2dec(string str)
+        {
+            return Convert.ToInt32(str, 16);
         }
        
 

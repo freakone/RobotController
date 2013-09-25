@@ -72,22 +72,47 @@
             this.button7 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.comboBoxADCValuesDevice = new System.Windows.Forms.ComboBox();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listViewCurrentValues = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageUstawienia = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDownADCRefresh = new System.Windows.Forms.NumericUpDown();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.treeViewDevices = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
-            this.numericUpDownADCRefresh = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.comboBoxMotorDevice = new System.Windows.Forms.ComboBox();
+            this.comboBoxMotorChannel = new System.Windows.Forms.ComboBox();
+            this.trackBarMotorSpeed = new System.Windows.Forms.TrackBar();
+            this.button2 = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.button5 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.comboBoxGPIOChannel = new System.Windows.Forms.ComboBox();
+            this.comboBoxGPIODevice = new System.Windows.Forms.ComboBox();
+            this.checkedListBoxGIPORead = new System.Windows.Forms.CheckedListBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.checkedListBoxGPIOWrite = new System.Windows.Forms.CheckedListBox();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabControlFunctions.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -106,12 +131,21 @@
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
             this.tabPageUstawienia.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownADCRefresh)).BeginInit();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownADCRefresh)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMotorSpeed)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -145,6 +179,7 @@
             this.tabControlFunctions.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.tabControlFunctions.Controls.Add(this.tabPage1);
             this.tabControlFunctions.Controls.Add(this.tabPage2);
+            this.tabControlFunctions.Controls.Add(this.tabPage3);
             this.tabControlFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlFunctions.Location = new System.Drawing.Point(0, 0);
             this.tabControlFunctions.Multiline = true;
@@ -388,7 +423,7 @@
             this.splitContainer2.Panel2.Controls.Add(this.button7);
             this.splitContainer2.Panel2.Controls.Add(this.button4);
             this.splitContainer2.Panel2.Controls.Add(this.comboBoxADCValuesDevice);
-            this.splitContainer2.Panel2.Controls.Add(this.listView1);
+            this.splitContainer2.Panel2.Controls.Add(this.listViewCurrentValues);
             this.splitContainer2.Size = new System.Drawing.Size(650, 425);
             this.splitContainer2.SplitterDistance = 170;
             this.splitContainer2.TabIndex = 2;
@@ -538,6 +573,7 @@
             this.button7.TabIndex = 3;
             this.button7.Text = "Usuń";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // button4
             // 
@@ -547,6 +583,7 @@
             this.button4.TabIndex = 2;
             this.button4.Text = "Dodaj";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // comboBoxADCValuesDevice
             // 
@@ -558,20 +595,20 @@
             this.comboBoxADCValuesDevice.TabIndex = 1;
             this.comboBoxADCValuesDevice.SelectedIndexChanged += new System.EventHandler(this.comboBoxADCValuesDevice_SelectedIndexChanged);
             // 
-            // listView1
+            // listViewCurrentValues
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listViewCurrentValues.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.listView1.FullRowSelect = true;
-            this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(650, 219);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listViewCurrentValues.Dock = System.Windows.Forms.DockStyle.Top;
+            this.listViewCurrentValues.FullRowSelect = true;
+            this.listViewCurrentValues.Location = new System.Drawing.Point(0, 0);
+            this.listViewCurrentValues.Name = "listViewCurrentValues";
+            this.listViewCurrentValues.Size = new System.Drawing.Size(650, 219);
+            this.listViewCurrentValues.TabIndex = 0;
+            this.listViewCurrentValues.UseCompatibleStateImageBehavior = false;
+            this.listViewCurrentValues.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
@@ -602,15 +639,47 @@
             this.tabPageUstawienia.TabIndex = 0;
             this.tabPageUstawienia.Text = "Ustawienia";
             // 
-            // tabPage2
+            // textBox1
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 4);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(664, 457);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.textBox1.Location = new System.Drawing.Point(137, 44);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 3;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 47);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(105, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Przeliczanie wartości";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(111, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Częstość odświeżania";
+            // 
+            // numericUpDownADCRefresh
+            // 
+            this.numericUpDownADCRefresh.Location = new System.Drawing.Point(137, 17);
+            this.numericUpDownADCRefresh.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDownADCRefresh.Name = "numericUpDownADCRefresh";
+            this.numericUpDownADCRefresh.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownADCRefresh.TabIndex = 0;
+            this.numericUpDownADCRefresh.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             // 
             // statusStrip1
             // 
@@ -663,47 +732,259 @@
             this.splitContainer1.SplitterDistance = 150;
             this.splitContainer1.TabIndex = 6;
             // 
-            // numericUpDownADCRefresh
+            // contextMenuStrip2
             // 
-            this.numericUpDownADCRefresh.Location = new System.Drawing.Point(137, 17);
-            this.numericUpDownADCRefresh.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.numericUpDownADCRefresh.Name = "numericUpDownADCRefresh";
-            this.numericUpDownADCRefresh.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownADCRefresh.TabIndex = 0;
-            this.numericUpDownADCRefresh.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(61, 4);
             // 
-            // label1
+            // comboBoxMotorDevice
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(111, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Częstość odświeżania";
+            this.comboBoxMotorDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxMotorDevice.FormattingEnabled = true;
+            this.comboBoxMotorDevice.Location = new System.Drawing.Point(6, 6);
+            this.comboBoxMotorDevice.Name = "comboBoxMotorDevice";
+            this.comboBoxMotorDevice.Size = new System.Drawing.Size(336, 21);
+            this.comboBoxMotorDevice.TabIndex = 3;
+            this.comboBoxMotorDevice.SelectedIndexChanged += new System.EventHandler(this.comboBoxMotorDevice_SelectedIndexChanged);
             // 
-            // label4
+            // comboBoxMotorChannel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 47);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(105, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Przeliczanie wartości";
+            this.comboBoxMotorChannel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxMotorChannel.FormattingEnabled = true;
+            this.comboBoxMotorChannel.Location = new System.Drawing.Point(348, 6);
+            this.comboBoxMotorChannel.Name = "comboBoxMotorChannel";
+            this.comboBoxMotorChannel.Size = new System.Drawing.Size(308, 21);
+            this.comboBoxMotorChannel.TabIndex = 4;
+            this.comboBoxMotorChannel.SelectedIndexChanged += new System.EventHandler(this.comboBoxMotorChannel_SelectedIndexChanged);
             // 
-            // textBox1
+            // trackBarMotorSpeed
             // 
-            this.textBox1.Location = new System.Drawing.Point(137, 44);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 3;
+            this.trackBarMotorSpeed.Location = new System.Drawing.Point(6, 52);
+            this.trackBarMotorSpeed.Name = "trackBarMotorSpeed";
+            this.trackBarMotorSpeed.Size = new System.Drawing.Size(472, 45);
+            this.trackBarMotorSpeed.TabIndex = 5;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(561, 46);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "Ustaw";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.radioButton2);
+            this.groupBox2.Controls.Add(this.radioButton1);
+            this.groupBox2.Location = new System.Drawing.Point(484, 33);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(71, 74);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(6, 19);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(52, 17);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Przód";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(7, 44);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(41, 17);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.Text = "Tył";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(3, 428);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 8;
+            this.button5.Text = "button5";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 152);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(14, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "P";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(152, 152);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(10, 13);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "I";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(294, 151);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(15, 13);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "D";
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(561, 146);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.TabIndex = 15;
+            this.button8.Text = "Ustaw";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(26, 150);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 16;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(315, 149);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown2.TabIndex = 17;
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Location = new System.Drawing.Point(168, 149);
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown3.TabIndex = 18;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.button10);
+            this.tabPage2.Controls.Add(this.button9);
+            this.tabPage2.Controls.Add(this.numericUpDown3);
+            this.tabPage2.Controls.Add(this.numericUpDown2);
+            this.tabPage2.Controls.Add(this.numericUpDown1);
+            this.tabPage2.Controls.Add(this.button8);
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.label5);
+            this.tabPage2.Controls.Add(this.button5);
+            this.tabPage2.Controls.Add(this.groupBox2);
+            this.tabPage2.Controls.Add(this.button2);
+            this.tabPage2.Controls.Add(this.trackBarMotorSpeed);
+            this.tabPage2.Controls.Add(this.comboBoxMotorChannel);
+            this.tabPage2.Controls.Add(this.comboBoxMotorDevice);
+            this.tabPage2.Location = new System.Drawing.Point(4, 4);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(664, 457);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Motor";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.groupBox4);
+            this.tabPage3.Controls.Add(this.groupBox3);
+            this.tabPage3.Controls.Add(this.comboBoxGPIOChannel);
+            this.tabPage3.Controls.Add(this.comboBoxGPIODevice);
+            this.tabPage3.Location = new System.Drawing.Point(4, 4);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(664, 457);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "GPIO";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxGPIOChannel
+            // 
+            this.comboBoxGPIOChannel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGPIOChannel.FormattingEnabled = true;
+            this.comboBoxGPIOChannel.Location = new System.Drawing.Point(348, 3);
+            this.comboBoxGPIOChannel.Name = "comboBoxGPIOChannel";
+            this.comboBoxGPIOChannel.Size = new System.Drawing.Size(308, 21);
+            this.comboBoxGPIOChannel.TabIndex = 6;
+            // 
+            // comboBoxGPIODevice
+            // 
+            this.comboBoxGPIODevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGPIODevice.FormattingEnabled = true;
+            this.comboBoxGPIODevice.Location = new System.Drawing.Point(6, 3);
+            this.comboBoxGPIODevice.Name = "comboBoxGPIODevice";
+            this.comboBoxGPIODevice.Size = new System.Drawing.Size(301, 21);
+            this.comboBoxGPIODevice.TabIndex = 5;
+            // 
+            // checkedListBoxGIPORead
+            // 
+            this.checkedListBoxGIPORead.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBoxGIPORead.FormattingEnabled = true;
+            this.checkedListBoxGIPORead.Location = new System.Drawing.Point(3, 16);
+            this.checkedListBoxGIPORead.Name = "checkedListBoxGIPORead";
+            this.checkedListBoxGIPORead.Size = new System.Drawing.Size(298, 317);
+            this.checkedListBoxGIPORead.TabIndex = 7;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.checkedListBoxGIPORead);
+            this.groupBox3.Location = new System.Drawing.Point(6, 48);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(304, 336);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Odczyt";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.checkedListBoxGPIOWrite);
+            this.groupBox4.Location = new System.Drawing.Point(348, 48);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(308, 336);
+            this.groupBox4.TabIndex = 9;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Zapis";
+            // 
+            // checkedListBoxGPIOWrite
+            // 
+            this.checkedListBoxGPIOWrite.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBoxGPIOWrite.FormattingEnabled = true;
+            this.checkedListBoxGPIOWrite.Location = new System.Drawing.Point(3, 16);
+            this.checkedListBoxGPIOWrite.Name = "checkedListBoxGPIOWrite";
+            this.checkedListBoxGPIOWrite.Size = new System.Drawing.Size(302, 317);
+            this.checkedListBoxGPIOWrite.TabIndex = 8;
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(562, 73);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(31, 23);
+            this.button9.TabIndex = 19;
+            this.button9.Text = "+";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(605, 73);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(31, 23);
+            this.button10.TabIndex = 20;
+            this.button10.Text = "-";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // MainForm
             // 
@@ -742,13 +1023,24 @@
             this.splitContainer3.ResumeLayout(false);
             this.tabPageUstawienia.ResumeLayout(false);
             this.tabPageUstawienia.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownADCRefresh)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownADCRefresh)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMotorSpeed)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -760,7 +1052,6 @@
         private System.Windows.Forms.ToolStripMenuItem ądzeniaToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControlFunctions;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.TreeView treeViewDevices;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -792,7 +1083,7 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ComboBox comboBoxADCValuesDevice;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listViewCurrentValues;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
@@ -812,6 +1103,32 @@
         private System.Windows.Forms.NumericUpDown numericUpDownADCRefresh;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TrackBar trackBarMotorSpeed;
+        private System.Windows.Forms.ComboBox comboBoxMotorChannel;
+        private System.Windows.Forms.ComboBox comboBoxMotorDevice;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckedListBox checkedListBoxGPIOWrite;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.CheckedListBox checkedListBoxGIPORead;
+        private System.Windows.Forms.ComboBox comboBoxGPIOChannel;
+        private System.Windows.Forms.ComboBox comboBoxGPIODevice;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button9;
     }
 }
 

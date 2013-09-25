@@ -189,6 +189,10 @@ namespace RobotController
                 comboBoxAnalog2Channel.Items.Clear();
                 comboBoxAnalog2Device.Items.Clear();
                 comboBoxAnalog1Device.Items.Clear();
+                comboBoxMotorDevice.Items.Clear();
+                comboBoxMotorChannel.Items.Clear();
+                comboBoxGPIOChannel.Items.Clear();
+                comboBoxGPIODevice.Items.Clear();
 
                 foreach (DeviceClass d in Globals.loaded_modules)
                 {
@@ -205,6 +209,12 @@ namespace RobotController
 
                     }
 
+                    if (d.settings.MOTOR_channels > 0)
+                    {
+                        comboBoxMotorDevice.Items.Add(d.ToString());            
+
+                    }
+
                     
                 }
 
@@ -213,6 +223,9 @@ namespace RobotController
                 comboBoxDeviceY.Items.Add("Czas");
                 comboBoxDeviceX.SelectedIndex = 0;
                 comboBoxDeviceY.SelectedIndex = 0;
+
+                if (comboBoxMotorDevice.Items.Count > 0)
+                    comboBoxMotorDevice.SelectedIndex = 0;
 
                 if (comboBoxADCValuesDevice.Items.Count > 0)
                 {                
@@ -323,6 +336,25 @@ namespace RobotController
 
                     chartTime += Settings.iADCInterval;
                 }
+
+                if(GetCheckBoxSelected(checkBoxADCTable))
+                {
+                    for(int i = 0; i < table_values.Count; i++)
+                    {
+                        int device = table_values[i][0];
+                        int channel = table_values[i][1];
+                        int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
+
+                        string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
+                        int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
+
+
+
+
+                    }
+
+                }
+
                 Thread.Sleep(Settings.iADCInterval);
             }
 
@@ -485,15 +517,120 @@ namespace RobotController
 
         }
 
+        List<int[]> table_values = new List<int[]>();
+
+        void RefreshCurrValuesList()
+        {
+            listViewCurrentValues.Items.Clear();
+
+            foreach(int[] i in table_values)
+            {
+                ListViewItem lvi = new ListViewItem();
+                lvi.SubItems.Add(Globals.loaded_modules[i[0]].settings.ADC_Names[i[1]]);
+                lvi.SubItems.Add("-");
+                lvi.SubItems.Add("-");
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (comboBoxADCValuesDevice.SelectedIndex == -1 || comboBoxADCValuesChannel.SelectedIndex == -1)
+                return;
+
+            table_values.Add(new int[] { comboBoxADCValuesDevice.SelectedIndex, comboBoxADCValuesChannel.SelectedIndex });
+
+            RefreshCurrValuesList();
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (listViewCurrentValues.SelectedItems.Count > 0)
+            {
+                table_values.RemoveAt(listViewCurrentValues.SelectedItems[0].Index);
+            }
+            RefreshCurrValuesList();
+        }
+
         #endregion
 
-  
+        #region MOTOR
+
+        private void comboBoxMotorDevice_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxMotorDevice.SelectedIndex < 0)
+                return;
+
+            comboBoxMotorChannel.Items.Clear();
+
+            DeviceSettings sett = Globals.loaded_modules[comboBoxMotorDevice.SelectedIndex].settings;
+
+            for (int i = 0; i < sett.MOTOR_channels; i++)
+            {
+                comboBoxMotorChannel.Items.Add(sett.MOTOR_Names[i]);
+            }
+
+            comboBoxMotorChannel.SelectedIndex = 0;
+        }
+
+        private void comboBoxMotorChannel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxMotorChannel.SelectedIndex == -1)
+                return;
+
+            DeviceSettings sett = Globals.loaded_modules[comboBoxMotorDevice.SelectedIndex].settings;
+
+            trackBarMotorSpeed.Value = 0;
+            trackBarMotorSpeed.Maximum = (int)sett.MOTOR_max;
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (comboBoxMotorDevice.SelectedIndex < 0 || comboBoxMotorChannel.SelectedIndex < 0)
+                return;
+
+            int device = comboBoxMotorDevice.SelectedIndex;
+            int channel = comboBoxMotorChannel.SelectedIndex;
+            int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
+
+            Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetMOTORIncCommand(), false);
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (comboBoxMotorDevice.SelectedIndex < 0 || comboBoxMotorChannel.SelectedIndex < 0)
+                return;
+
+            int device = comboBoxMotorDevice.SelectedIndex;
+            int channel = comboBoxMotorChannel.SelectedIndex;
+            int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
+
+            Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetMOTORDecCommand(), false);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (comboBoxMotorDevice.SelectedIndex < 0 || comboBoxMotorChannel.SelectedIndex < 0)
+                return;
+
+            int device = comboBoxMotorDevice.SelectedIndex;
+            int channel = comboBoxMotorChannel.SelectedIndex;
+            int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
+
+            Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetMOTORSetCommand(channel, trackBarMotorSpeed.Value), false);
+        }
+
+        #endregion
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (threadADC != null && threadADC.IsAlive)
                 threadADC.Abort();
         }
 
+        
+
+         
 
     }
 }

@@ -37,18 +37,27 @@ namespace PluginSystem
             return vals;
 
         }
-        public override void SetMOTOR(int id, int value)
+
+        public override string GetMOTORDecCommand()
         {
-            throw new NotImplementedException();
+            return String.Format("{0}{1}{2}", (char)0xff, (char)this.uID, (char)0x24);
         }
 
+        public override string GetMOTORIncCommand()
+        {
+            return String.Format("{0}{1}{2}", (char)0xff, (char)this.uID, (char)0x22);
+        }
+
+        public override string GetMOTORSetCommand(int num, int val)
+        {
+            return String.Format("{0}{1}{2}{3}{4}", (char)0xff, (char)this.uID, (char)0x26, base.dec2hascii(num, 3), base.dec2hascii(val, 8));
+        }
 
         public override string[] GetScanCommand()
         {
             List<string> c = new List<string>();
-          //  for(int i = 0x11; i < 0xFE; i++)
-            {
-                int i = 0x11;
+            for(int i = 0x11; i < 0x30; i++)
+            {                
                 c.Add(String.Format("{0}{1}{2}", (char)0xFF, (char)i, (char)0x70));
             }
 
