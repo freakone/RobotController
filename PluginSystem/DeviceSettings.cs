@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.IO.Ports;
 using System.ComponentModel;
 
@@ -98,6 +97,8 @@ namespace PluginSystem
             get { return stop; }
             set { stop = value; }
         }
+
+        public string strComPort = "COM";
 
         public string strEndLine = "\n";
 

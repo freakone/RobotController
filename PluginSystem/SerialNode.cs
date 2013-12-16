@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows.Forms;
@@ -59,7 +58,9 @@ namespace PluginSystem
             throw new NotImplementedException();
         }
 
-        public string SendData(string data, bool response)
+       
+
+        public string SendData(string data, bool response, uint response_length)
         {
             lock (m_oPadlock)
             {

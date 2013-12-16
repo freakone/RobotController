@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using PluginSystem;
 
 namespace PluginSystem
@@ -40,17 +39,27 @@ namespace PluginSystem
 
         public override string GetMOTORDecCommand()
         {
-            return String.Format("{0}{1}{2}", (char)0xff, (char)this.uID, (char)0x24);
+            return String.Format("{0}{1}{2}0000000F", (char)0xff, (char)this.uID, (char)0x22);
+        }
+
+        public override string GetAliveCommand()
+        {
+            return String.Format("{0}{1}{2}", (char)0xff, (char)this.uID, (char)0x70);
+        }
+
+        public override bool ParseAliveCommand(string str)
+        {
+            return str != "";
         }
 
         public override string GetMOTORIncCommand()
         {
-            return String.Format("{0}{1}{2}", (char)0xff, (char)this.uID, (char)0x22);
+            return String.Format("{0}{1}{2}0000000F", (char)0xff, (char)this.uID, (char)0x23);
         }
 
         public override string GetMOTORSetCommand(int num, int val)
         {
-            return String.Format("{0}{1}{2}{3}{4}", (char)0xff, (char)this.uID, (char)0x26, base.dec2hascii(num, 3), base.dec2hascii(val, 8));
+            return String.Format("{0}{1}{2}{3}{4}", (char)0xff, (char)this.uID, (char)0x27, base.dec2hascii(num, 3), base.dec2hascii(val, 8));
         }
 
         public override string[] GetScanCommand()
@@ -79,7 +88,7 @@ namespace PluginSystem
 
         public override DeviceClass Create()
         {
-            return new RBcClient(); 
+           return new RBcClient();
         }
 
 

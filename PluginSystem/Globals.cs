@@ -1,18 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Drawing;
 using System.Reflection;
 using System.IO;
 
 namespace PluginSystem
 {
+
+    public class ChartSeries
+    {
+        public int x_channel;
+        public int y_channel;
+        public int x_device;
+        public int y_device;
+        public List<float> x_samples = new List<float>();
+        public List<float> y_samples = new List<float>();
+        public string strName;
+    }
     public static class Globals
     {
         public static string strConfigFiles = "";
         public static string strPluginFiles = "";
+        public static string strSettingsFiles = "";
         public static readonly Color status_error = Color.Red;
         public static readonly Color status_info = Color.Black;
         public static readonly Color status_success = Color.Green;

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Instruments;
 using System.IO;
@@ -13,6 +11,8 @@ using PluginSystem;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.IO.Ports;
+
 namespace RobotController
 {
     public partial class MainForm : Form
@@ -23,11 +23,16 @@ namespace RobotController
             Globals.statusEvent += new Globals.SetStatusEvent(SetStatus);
             Globals.strConfigFiles = Application.StartupPath + Path.DirectorySeparatorChar + "config_files" + Path.DirectorySeparatorChar;
             Globals.strPluginFiles = Application.StartupPath + Path.DirectorySeparatorChar + "plugin_files" + Path.DirectorySeparatorChar;
+            Globals.strSettingsFiles = Application.StartupPath + Path.DirectorySeparatorChar + "settings.dat";
 
             if (!Directory.Exists(Globals.strConfigFiles))
                 Directory.CreateDirectory(Globals.strConfigFiles);
 
             Globals.LoadDlls();
+
+            OldDeviceScan();
+            Settings.LoadSettings();
+            SettingsToForm();         
 
 
             threadADC = new Thread(new ThreadStart(ADCScan));
@@ -37,6 +42,11 @@ namespace RobotController
 
         #region forma glowna
 
+        public void SettingsToForm()
+        {
+            numericUpDownADCSamples.Value = Settings.iChartSamples;
+            numericUpDownADCRefresh.Value = Settings.iADCInterval;
+        }
         public void SetStatus(object sender, SetStatusEventArgs e)
         {
             if (this.InvokeRequired)
@@ -77,8 +87,54 @@ namespace RobotController
 
         #region skanowanie
 
-        private readonly int[] bauds = new int[] { 115200 };
+        private readonly int[] bauds = new int[] { 115200, 9600 };
         private Thread scanThread;
+
+        void OldDeviceScan()
+        {
+            string[] files = Directory.GetFiles(Globals.strConfigFiles, "*.xml");
+
+            foreach(string file in files)
+            {
+                string[] s = Path.GetFileNameWithoutExtension(file).Split('_');
+
+                if(s.Length == 2)
+                {
+                    foreach(DeviceClass dc in Globals.known_modules)
+                    {
+                        if(dc.type == s[1])
+                        {
+                            DeviceClass nowy = dc.Create();
+                            nowy.uID = uint.Parse(s[0]);
+                            nowy.LoadSettings();
+                            nowy.strCOMName = nowy.settings.strComPort;
+                            nowy.settings.strEndLine = nowy.packetEnd.ToString();
+                      
+                            foreach(string sss in SerialPort.GetPortNames())
+                            if (sss == nowy.strCOMName)
+                            {
+                                SerialNode node;
+                                int det = Globals.ContainsPort(nowy.strCOMName);
+                                if (det > -1)
+                                    node = Globals.serial_ports[det];
+                                else
+                                {
+                                    node = new SerialNode(nowy.strCOMName);
+                                    Globals.serial_ports.Add(node);
+                                }
+
+                                Globals.loaded_modules.Add(nowy);
+
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+            ReloadDeviceList();
+        }
         void DeviceScan(string[] COM)
         {
 
@@ -113,7 +169,7 @@ namespace RobotController
                         resps[b] = new string[cmds.Length];
                         for (int c = 0; c < cmds.Length; c++)
                         {
-                            resps[b][c] = node.SendData(cmds[c], true);
+                            resps[b][c] = node.SendData(cmds[c], true, dc.uResponseLength);
                             ProgressBarStep();
                         }
                     }
@@ -127,10 +183,13 @@ namespace RobotController
                         {
                             DeviceClass dcnew = dc.Create();
                             dcnew.settings.BaudRate = bauds[b];
-                            dcnew.uID = u;
-                            dcnew.strCOMName = s;
+                            dcnew.uID = u;                                                                        
                             dcnew.LoadSettings();
+                            dcnew.strCOMName = s;
                             Globals.loaded_modules.Add(dcnew);
+
+                            dcnew.settings.strComPort = s;
+                            dcnew.SaveSettings();
                         }
                     }
                 }               
@@ -256,17 +315,26 @@ namespace RobotController
             }
         }
 
-        public void AddToSeries(int ser, int x, int y)
+        public void AddToSeries(int ser, double x, double y)
         {
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(delegate()
                 {
+                    while (chart1.Series[ser].Points.Count > Settings.iChartSamples)
+                        chart1.Series[ser].Points.RemoveAt(0);
+                   
+                    
                     chart1.Series[ser].Points.AddXY(x, y);
+                    chart1.ResetAutoValues();
 
                 }));
             else
             {
+                while (chart1.Series[ser].Points.Count > Settings.iChartSamples)
+                    chart1.Series[ser].Points.RemoveAt(0);
+
                 chart1.Series[ser].Points.AddXY(x, y);
+                chart1.ResetAutoValues();
             }
         }
 
@@ -304,7 +372,9 @@ namespace RobotController
                     int channel = GetComboIndex(comboBoxAnalog1Channel);
                     int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
 
-                    string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
+                    Globals.serial_ports[com].SetParameters(Globals.loaded_modules[device].settings);
+                    string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true, Globals.loaded_modules[device].uResponseLength);                   
+
                     int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
 
                     SetAnalogVal(vals[channel], analogMeter1);
@@ -316,24 +386,63 @@ namespace RobotController
                     int channel = GetComboIndex(comboBoxAnalog2Channel);
                     int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
 
-                    string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
+                    Globals.serial_ports[com].SetParameters(Globals.loaded_modules[device].settings);
+                    string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true, Globals.loaded_modules[device].uResponseLength);
                     int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
 
                     SetAnalogVal(vals[channel], analogMeter2);
 
                 }
 
-                if(GetCheckBoxSelected(checkBoxChart))
+                if (GetCheckBoxSelected(checkBoxChart))
                 {
-                    int device = GetComboIndex(comboBoxDeviceY);
-                    int channel = GetComboIndex(comboBoxChannelY);
-                    int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
+                    foreach (ChartSeries ss in chart_series)
+                    {
+                        try
+                        {
 
-                    string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
-                    int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
+                            float x;
+                            float y;
 
-                    AddToSeries(channel, chartTime, vals[channel]);
+                            if (ss.x_device == -1)
+                            {
+                                x = chartTime;
+                            }
+                            else
+                            {                               
+                                int com = Globals.ContainsPort(Globals.loaded_modules[ss.x_device].strCOMName);
+                                Globals.serial_ports[com].SetParameters(Globals.loaded_modules[ss.x_device].settings);
+                                string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[ss.x_device].GetADCCommand(), true, Globals.loaded_modules[ss.x_device].uResponseLength);
+                                int[] vals = Globals.loaded_modules[ss.x_device].ParseADCCommand(resp);
+                                x = vals[ss.x_channel];
+                            }
 
+                            if (ss.y_device == -1)
+                            {
+                                y = chartTime;
+                            }
+                            else
+                            {
+                                int com = Globals.ContainsPort(Globals.loaded_modules[ss.y_device].strCOMName);
+                                Globals.serial_ports[com].SetParameters(Globals.loaded_modules[ss.y_device].settings);
+                                string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[ss.y_device].GetADCCommand(), true, Globals.loaded_modules[ss.y_device].uResponseLength);
+                                int[] vals = Globals.loaded_modules[ss.y_device].ParseADCCommand(resp);
+                                y = vals[ss.y_channel];
+                            }
+
+                            ss.x_samples.Add(x);
+                            ss.y_samples.Add(y);
+
+
+                            AddToSeries(chart_series.IndexOf(ss), x, y);
+
+                        }
+                        catch(Exception ex)
+                        {
+                          
+                        }
+
+                    }
                     chartTime += Settings.iADCInterval;
                 }
 
@@ -345,7 +454,8 @@ namespace RobotController
                         int channel = table_values[i][1];
                         int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
 
-                        string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true);
+                        Globals.serial_ports[com].SetParameters(Globals.loaded_modules[device].settings);
+                        string resp = Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetADCCommand(), true, Globals.loaded_modules[device].uResponseLength);
                         int[] vals = Globals.loaded_modules[device].ParseADCCommand(resp);
 
 
@@ -360,30 +470,55 @@ namespace RobotController
 
         }
 
-        List<int[]> chart_series = new List<int[]>();
+        List<ChartSeries> chart_series = new List<ChartSeries>();
         private void btnChartAddSeries_Click(object sender, EventArgs e)
         {
             if (textBoxSeriesName.Text.Length == 0)
                 return;
 
-            chart_series.Add(new int[4] { comboBoxDeviceX.SelectedIndex == comboBoxDeviceX.Items.Count - 1 ? -1 : comboBoxDeviceX.SelectedIndex, comboBoxChannelX.SelectedIndex, comboBoxDeviceY.SelectedIndex == comboBoxDeviceY.Items.Count - 1 ? -1 : comboBoxDeviceY.SelectedIndex, comboBoxChannelY.SelectedIndex });
-            chart1.Series.Clear();
 
-            Series s = new Series(textBoxSeriesName.Text);
-            s.ChartType = SeriesChartType.Spline;
-            s.Points.Clear();
-            chart1.Series.Add(s);
-            
+            if(checkBoxChart.Checked)
+            {
+                MessageBox.Show("Zatrzymaj pomiar!");
+                return;
+            }
+
+            ChartSeries cs = new ChartSeries();
+           
+            cs.strName = textBoxSeriesName.Text;
+            cs.x_device = (comboBoxDeviceX.SelectedIndex == comboBoxDeviceX.Items.Count - 1) ? -1 : comboBoxDeviceX.SelectedIndex;
+            cs.x_channel = comboBoxChannelX.SelectedIndex;
+            cs.y_device = (comboBoxDeviceY.SelectedIndex == comboBoxDeviceY.Items.Count - 1) ? -1 : comboBoxDeviceY.SelectedIndex;
+            cs.y_channel = comboBoxChannelY.SelectedIndex;
+            chart_series.Add(cs);
+
+            RefreshSeriesList();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (listBoxChartSeries.SelectedIndex == -1)
+                return;
+
+            chart_series.RemoveAt(listBoxChartSeries.SelectedIndex);
             RefreshSeriesList();
         }
 
         void RefreshSeriesList()
         {
             listBoxChartSeries.Items.Clear();
+            chart1.Series.Clear();
 
-            foreach(Series s in chart1.Series)
-            {              
-                listBoxChartSeries.Items.Add(s.Name);                
+            foreach (ChartSeries ser in chart_series)
+            {
+
+                listBoxChartSeries.Items.Add(ser.strName);
+
+                Series s = new Series(ser.strName);
+                s.ChartType = SeriesChartType.Spline;
+                s.Points.Clear();
+                chart1.Series.Add(s);            
+
             }
 
         }
@@ -586,26 +721,20 @@ namespace RobotController
 
         private void button9_Click(object sender, EventArgs e)
         {
-            if (comboBoxMotorDevice.SelectedIndex < 0 || comboBoxMotorChannel.SelectedIndex < 0)
+            if (trackBarMotorSpeed.Value +10 > trackBarMotorSpeed.Maximum)
                 return;
 
-            int device = comboBoxMotorDevice.SelectedIndex;
-            int channel = comboBoxMotorChannel.SelectedIndex;
-            int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
-
-            Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetMOTORIncCommand(), false);
+            trackBarMotorSpeed.Value+=10;
+            button2_Click(null, null);
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
-            if (comboBoxMotorDevice.SelectedIndex < 0 || comboBoxMotorChannel.SelectedIndex < 0)
+            if (trackBarMotorSpeed.Value-10 < trackBarMotorSpeed.Minimum)
                 return;
 
-            int device = comboBoxMotorDevice.SelectedIndex;
-            int channel = comboBoxMotorChannel.SelectedIndex;
-            int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
-
-            Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetMOTORDecCommand(), false);
+            trackBarMotorSpeed.Value-=10;
+            button2_Click(null, null);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -617,7 +746,8 @@ namespace RobotController
             int channel = comboBoxMotorChannel.SelectedIndex;
             int com = Globals.ContainsPort(Globals.loaded_modules[device].strCOMName);
 
-            Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetMOTORSetCommand(channel, trackBarMotorSpeed.Value), false);
+            Globals.serial_ports[com].SetParameters(Globals.loaded_modules[device].settings);
+            Globals.serial_ports[com].SendData(Globals.loaded_modules[device].GetMOTORSetCommand(channel, radioButton2.Checked ? -1 * trackBarMotorSpeed.Value : trackBarMotorSpeed.Value), false, Globals.loaded_modules[device].uResponseLength);
         }
 
         #endregion
@@ -626,7 +756,65 @@ namespace RobotController
         {
             if (threadADC != null && threadADC.IsAlive)
                 threadADC.Abort();
+
+            Settings.SaveSettings();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            foreach (Series s in chart1.Series)
+                s.Points.Clear();
+        }
+
+        private void zapiszWykresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "*.png|*.png";
+            save.ShowDialog();
+
+            if (save.FileName.Length > 0)
+                chart1.SaveImage(save.FileName, ChartImageFormat.Png);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (listBoxChartSeries.SelectedIndex == -1)
+                return;
+
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "*.csv|*.csv";
+            save.ShowDialog();
+
+            string file = "x;y\n";
+
+            ChartSeries ser = chart_series[listBoxChartSeries.SelectedIndex];
+
+            for (int i = 0; i < ser.x_samples.Count; i++)
+            {
+                file += ser.x_samples[i] + ";" + ser.y_samples[i] + "\n";
+            }
+
+            File.WriteAllText(save.FileName, file);
+  
+            
+        }
+
+        private void trackBarMotorSpeed_ValueChanged(object sender, EventArgs e)
+        {
+            labelMotorVal.Text = trackBarMotorSpeed.Value.ToString();
+        }
+
+        private void numericUpDownADCRefresh_ValueChanged(object sender, EventArgs e)
+        {
+            Settings.iADCInterval = (int)numericUpDownADCRefresh.Value;
+        }
+
+        private void numericUpDownADCSamples_ValueChanged(object sender, EventArgs e)
+        {
+            Settings.iChartSamples = (int)numericUpDownADCSamples.Value;
+        }
+
+
 
         
 

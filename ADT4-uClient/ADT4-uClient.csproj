@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8E92DEFC-F2C8-499B-8E68-C23CA32C60B6}</ProjectGuid>
+    <ProjectGuid>{249A0809-D8E6-48A9-98B3-5FBA7F2B31D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PluginSystem</RootNamespace>
-    <AssemblyName>PluginSystem</AssemblyName>
+    <RootNamespace>ADT4_uClient</RootNamespace>
+    <AssemblyName>ADT4-uClient</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\RobotController\bin\Debug\plugin_files\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,9 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,23 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeviceClass.cs" />
-    <Compile Include="DeviceSettings.cs" />
-    <Compile Include="Globals.cs" />
-    <Compile Include="ModuleSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ModuleSettings.Designer.cs">
-      <DependentUpon>ModuleSettings.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialNode.cs" />
-    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ModuleSettings.resx">
-      <DependentUpon>ModuleSettings.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\PluginSystem\PluginSystem.csproj">
+      <Project>{8e92defc-f2c8-499b-8e68-c23ca32c60b6}</Project>
+      <Name>PluginSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
